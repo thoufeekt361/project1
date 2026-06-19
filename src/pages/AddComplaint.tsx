@@ -1,6 +1,7 @@
-
+import { useState } from "react";
 
 function AddComplaint() {
+  const [showPopup, setShowPopup] = useState(false);
   return (
     <>
     <div className="login-page">
@@ -56,7 +57,20 @@ function AddComplaint() {
           />
         </div>
 
-        <button>Submit Complaint</button>
+        <button onClick={() => setShowPopup(true)}>
+          Submit Complaint
+        </button>
+        {showPopup && (
+  <div className="popup-overlay">
+    <div className="popup-box">
+      <h3>Success</h3>
+      <p>Complaint Submitted Successfully!</p>
+      <button onClick={() => setShowPopup(false)}>
+        OK
+      </button>
+    </div>
+  </div>
+)}
       </div>
     </div>
     </>
