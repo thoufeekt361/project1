@@ -137,21 +137,21 @@ return (
 
     <div className="doughnut-wrapper">
       <Doughnut
-  data={chartData}
-  options={{
-    responsive: true,
-    animation: false,
-    cutout: "70%",
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        enabled: false,
-      },
-    },
-  }}
-/>
+        data={chartData}
+        options={{
+          responsive: true,
+          animation: false,
+          cutout: "70%",
+          plugins: {
+            legend: {
+            display: false,
+            },
+            tooltip: {
+              enabled: false,
+            },
+          },
+        }}
+      />
 
       <div className="center-text">
         <h3>5</h3>
