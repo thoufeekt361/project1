@@ -1324,15 +1324,15 @@ td{
 }
 
 .lab-dot {
-  background: #60a5fa;
+  background: #10b981;
 }
 
 .hostel-dot {
-  background: #8b5cf6;
+  background: #f59e0b;
 }
 
 .library-dot {
-  background: #34d399;
+  background: #ef4444;
 }
 
 @media (max-width: 768px) {

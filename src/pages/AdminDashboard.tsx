@@ -136,15 +136,22 @@ return (
     <h2>Complaints by Category</h2>
 
     <div className="doughnut-wrapper">
-      <Doughnut data={chartData}
-      options={{
-        cutout: "70%",
-        plugins: {
-          legend: {
-            display: false,
-          },
-        },
-      }} />
+      <Doughnut
+  data={chartData}
+  options={{
+    responsive: true,
+    animation: false,
+    cutout: "70%",
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        enabled: false,
+      },
+    },
+  }}
+/>
 
       <div className="center-text">
         <h3>5</h3>
