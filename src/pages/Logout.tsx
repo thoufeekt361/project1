@@ -1,12 +1,14 @@
 
 import { useNavigate } from "react-router-dom";
+import StudentNavbar from "../components/StudentNavbar";
+import AdminNavbar from "../components/AdminNavbar";
 
 function Logout() {
   const navigate = useNavigate();
-
+  const role = localStorage.getItem("role");
   return (
     <>
-
+        {role === "admin" ? <AdminNavbar /> : <StudentNavbar />}
       <div className="logout-page">
 
         <div className="logout-card">
@@ -24,19 +26,18 @@ function Logout() {
 
           <div className="logout-buttons">
 
-            <button
-              className="cancel-btn"
-              onClick={() => navigate("/dashboard")}
-            >
-              Cancel
-            </button>
+            
 
             <button
-              className="logout-btn"
-              onClick={() => navigate("/login")}
-            >
-              Logout
-            </button>
+  className="logout-btn"
+  onClick={() => {
+    localStorage.removeItem("role");
+    localStorage.removeItem("studentName");
+    navigate("/login");
+  }}
+>
+  Logout
+</button>
 
           </div>
 

@@ -1,60 +1,38 @@
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import {  FaBell, FaUserCircle } from "react-icons/fa";
+import StudentNavbar from "../components/StudentNavbar";
 
 function MyComplaints() {
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
+  const [complaints, setComplaints] = useState<any[]>([]);
 
-  const complaints = [
-    {
-      id: "#CC001",
-      title: "WiFi not working in Block A",
-      category: "Internet",
-      status: "Pending",
-      date: "12 May 2026",
-    },
-    {
-      id: "#CC002",
-      title: "Projector Issue",
-      category: "Laboratory",
-      status: "In Progress",
-      date: "10 May 2026",
-    },
-    {
-      id: "#CC003",
-      title: "Water Leakage",
-      category: "Hostel",
-      status: "Resolved",
-      date: "08 May 2026",
-    },
-    {
-      id: "#CC004",
-      title: "Classroom Fan Not Working",
-      category: "Electrical",
-      status: "Pending",
-      date: "06 May 2026",
-    },
-    {
-      id: "#CC005",
-      title: "Library AC Issue",
-      category: "Library",
-      status: "Resolved",
-      date: "04 May 2026",
-    },
-  ];
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/complaints")
+      .then((res) => {
+        setComplaints(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   const filteredComplaints = complaints.filter((complaint) => {
     const matchesSearch =
       complaint.title.toLowerCase().includes(search.toLowerCase()) ||
-      complaint.id.toLowerCase().includes(search.toLowerCase());
+      complaint._id.toLowerCase().includes(search.toLowerCase());
 
     const matchesFilter =
       filter === "All" || complaint.status === filter;
 
     return matchesSearch && matchesFilter;
   });
+
   return (
-    <>
+    <div className="mycontent">
+          <StudentNavbar />
 
       <div className="table-container">
         <h1 className="mycom">My Complaints</h1>
@@ -93,42 +71,37 @@ function MyComplaints() {
             </thead>
 
             <tbody>
-  {filteredComplaints.map((complaint) => (
-    <tr
-      key={complaint.id}
-      className={
-        search &&
-        complaint.title
-          .toLowerCase()
-          .includes(search.toLowerCase())
-          ? "highlight-row"
-          : ""
-      }
-    >
-      <td>{complaint.id}</td>
-      <td>{complaint.title}</td>
-      <td>{complaint.category}</td>
-      <td>
-        <span
-          className={
-            complaint.status === "Pending"
-              ? "pending"
-              : complaint.status === "In Progress"
-              ? "progress"
-              : "resolved"
-          }
-        >
-          {complaint.status}
-        </span>
-      </td>
-      <td>{complaint.date}</td>
-    </tr>
-  ))}
-</tbody>
+              {filteredComplaints.map((complaint) => (
+                <tr key={complaint._id}>
+                  <td>{complaint._id.slice(-6)}</td>
+                  <td>{complaint.title}</td>
+                  <td>{complaint.category}</td>
+                  <td>
+                    <span
+                      className={
+                        complaint.status === "Pending"
+                          ? "pending"
+                          : complaint.status === "In Progress"
+                          ? "progress"
+                          : "resolved"
+                      }
+                    >
+                      {complaint.status}
+                    </span>
+                  </td>
+                  <td>
+                    {new Date(
+                      complaint.createdAt
+                    ).toLocaleDateString()}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+
           </table>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

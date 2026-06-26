@@ -6,7 +6,10 @@ function Home() {
 
   return (
     <>
-      <Navbar />
+    <div className="navbar1">
+        <Navbar />
+    </div>
+      
 
       <div className="hero">
         <div className="hero-content">

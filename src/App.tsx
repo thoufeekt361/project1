@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
@@ -14,27 +15,64 @@ import AdminDashboard from "./pages/AdminDashboard";
 import ManageComplaints from "./pages/ManageComplaints";
 import ManageStudents from "./pages/ManageStudents";
 import AdminProfile from "./pages/AdminProfile";
-import "./App.css"
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+
+import "./App.css";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Home */}
         <Route path="/" element={<Home />} />
+
+        {/* Public Pages */}
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/logout" element={<Logout />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/add-complaint" element={<AddComplaint />} />
-        <Route path="/my-complaints" element={<MyComplaints />} />
+
+        {/* Authentication */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route
+          path="/forgot-password"
+          element={<ForgotPassword />}
+        />
+        <Route
+          path="/reset-password/:token"
+          element={<ResetPassword />}
+        />
+
+        {/* Student */}
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        <Route path="/manage-complaints" element={<ManageComplaints />} />
-        <Route path="/manage-students" element={<ManageStudents />} />
-        <Route path="/admin-profile" element={<AdminProfile />} />
+        <Route
+          path="/add-complaint"
+          element={<AddComplaint />}
+        />
+        <Route
+          path="/my-complaints"
+          element={<MyComplaints />}
+        />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/logout" element={<Logout />} />
+
+        {/* Admin */}
+        <Route
+          path="/admin-dashboard"
+          element={<AdminDashboard />}
+        />
+        <Route
+          path="/manage-complaints"
+          element={<ManageComplaints />}
+        />
+        <Route
+          path="/manage-students"
+          element={<ManageStudents />}
+        />
+        <Route
+          path="/admin-profile"
+          element={<AdminProfile />}
+        />
       </Routes>
     </BrowserRouter>
   );

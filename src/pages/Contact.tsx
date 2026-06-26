@@ -4,7 +4,6 @@ function Contact() {
   return (
     <>
       <Navbar />
-
       <div className="info-container">
         <h2 className="head">Contact Us</h2>
 

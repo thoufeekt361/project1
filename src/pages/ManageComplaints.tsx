@@ -1,138 +1,117 @@
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
+import axios from "axios";
+import AdminNavbar from "../components/AdminNavbar.tsx";
+
 function ManageComplaints() {
-const [search, setSearch] = useState("");
-const [filter, setFilter] = useState("All");
-const [complaints, setComplaints] = useState([
-  {
-    id: "#CC001",
-    student: "Rahul",
-    complaint: "WiFi Issue",
-    category: "Internet",
-    status: "Pending",
-  },
-  {
-    id: "#CC002",
-    student: "Arun",
-    complaint: "Projector Issue",
-    category: "Lab",
-    status: "In Progress",
-  },
-  {
-    id: "#CC003",
-    student: "Akhil",
-    complaint: "Water Leakage",
-    category: "Hostel",
-    status: "Resolved",
-  },
-  {
-    id: "#CC004",
-    student: "Kiran",
-    complaint: "Bulb not working",
-    category: "Classroom",
-    status: "Pending",
-  },
-  {
-    id: "#CC005",
-    student: "Manoj",
-    complaint: "AC issue",
-    category: "Library",
-    status: "Pending",
-  },
-]);
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("All");
+  const [complaints, setComplaints] = useState<any[]>([]);
 
-const updateStatus = (index: number, value: string) => {
-  const updated = [...complaints];
-  updated[index].status = value;
-  setComplaints(updated);
-};
-const filteredComplaints = complaints.filter((item) => {
-  const matchesSearch =
-    item.id.toLowerCase().includes(search.toLowerCase()) ||
-    item.student.toLowerCase().includes(search.toLowerCase()) ||
-    item.complaint.toLowerCase().includes(search.toLowerCase());
+  useEffect(() => {
+    fetchComplaints();
+  }, []);
 
-  const matchesFilter =
-    filter === "All" || item.status === filter;
+  const fetchComplaints = () => {
+    axios
+      .get("http://localhost:5000/api/complaints")
+      .then((res) => {
+        setComplaints(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
 
-  return matchesSearch && matchesFilter;
-});
-return ( 
+  const updateStatus = async (id: string, status: string) => {
+    try {
+      await axios.put(
+        `http://localhost:5000/api/complaints/${id}`,
+        { status }
+      );
 
-<div className="table-container"> <h1 className="mycom">Manage Complaints</h1>
-<div className="complaint-actions">
-  <input
-    type="text"
-    placeholder="Search complaints..."
-    className="search-box"
-    value={search}
-    onChange={(e) => setSearch(e.target.value)}
-  />
+      fetchComplaints();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-  <select
-    className="filter-select"
-    value={filter}
-    onChange={(e) => setFilter(e.target.value)}
-  >
-    <option value="All">All Status</option>
-    <option value="Pending">Pending</option>
-    <option value="In Progress">In Progress</option>
-    <option value="Resolved">Resolved</option>
-  </select>
-</div>
+  const filteredComplaints = complaints.filter((item) => {
+    const matchesSearch =
+      item.title?.toLowerCase().includes(search.toLowerCase()) ||
+      item.category?.toLowerCase().includes(search.toLowerCase());
 
-  <div className="table-box">
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Student</th>
-          <th>Complaint</th>
-          <th>Category</th>
-          <th>Update Status</th>
-          <th>Action</th>
-        </tr>
-      </thead>
+    const matchesFilter =
+      filter === "All" || item.status === filter;
 
-      <tbody>
-  {filteredComplaints.map((item, index) => (
-    <tr key={item.id}>
-      <td>{item.id}</td>
-      <td>{item.student}</td>
-      <td>{item.complaint}</td>
-      <td>{item.category}</td>
+    return matchesSearch && matchesFilter;
+  });
 
-      <td>
+  return (
+    <div className="table-container">
+      <AdminNavbar />
+      <h1 className="mycom">Manage Complaints</h1>
+
+      <div className="complaint-actions">
+        <input
+          type="text"
+          placeholder="Search complaints..."
+          className="search-box"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+
         <select
-          className={
-            item.status === "Pending"
-              ? "pending"
-              : item.status === "In Progress"
-              ? "progress"
-              : "resolved"
-          }
-          value={item.status}
-          onChange={(e) =>
-            updateStatus(index, e.target.value)
-          }
+          className="filter-select"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
         >
-          <option>Pending</option>
-          <option>In Progress</option>
-          <option>Resolved</option>
+          <option value="All">All Status</option>
+          <option value="Pending">Pending</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Resolved">Resolved</option>
         </select>
-      </td>
+      </div>
 
-      <td>
-        <button className="update-btn">
-          {item.status === "Resolved" ? "View" : "Update Status"}
-        </button>
-      </td>
-    </tr>
-  ))}
-</tbody>
-    </table>
-  </div>
-</div>
-);
+      <div className="table-box">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Complaint</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Update Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {filteredComplaints.map((item) => (
+              <tr key={item._id}>
+                <td>{item._id.slice(-6)}</td>
+                <td>{item.title}</td>
+                <td>{item.category}</td>
+
+                <td>{item.status}</td>
+
+                <td>
+                  <select
+                    value={item.status}
+                    onChange={(e) =>
+                      updateStatus(item._id, e.target.value)
+                    }
+                  >
+                    <option>Pending</option>
+                    <option>In Progress</option>
+                    <option>Resolved</option>
+                  </select>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+
+        </table>
+      </div>
+    </div>
+  );
 }
 
 export default ManageComplaints;

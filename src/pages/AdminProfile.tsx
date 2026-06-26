@@ -1,8 +1,13 @@
+import AdminNavbar from "../components/AdminNavbar";
 function AdminProfile() {
-return ( <div className="profile-page">
+const name = localStorage.getItem("name");
+const email = localStorage.getItem("email");
+const role = localStorage.getItem("role");
 
-  <div className="profile-card">
-
+return ( 
+  <div className="profile-page"> 
+      <AdminNavbar />
+    <div className="profile-card">
     <div className="profile-avatar">
       👨‍💼
     </div>
@@ -13,29 +18,24 @@ return ( <div className="profile-page">
 
       <div className="detail-row">
         <span>Name</span>
-        <span>Administrator</span>
+        <span>{name}</span>
       </div>
 
       <div className="detail-row">
         <span>Email</span>
-        <span>admin@ccms.com</span>
+        <span>{email}</span>
       </div>
 
       <div className="detail-row">
         <span>Role</span>
-        <span>Admin</span>
-      </div>
-
-      <div className="detail-row">
-        <span>Department</span>
-        <span>Administration</span>
+        <span>{role}</span>
       </div>
 
     </div>
 
   </div>
-
 </div>
+
 
 );
 }
